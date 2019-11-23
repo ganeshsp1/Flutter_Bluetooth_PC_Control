@@ -1,0 +1,30 @@
+name: bluetooth_pc_control
+version: 0.1.0
+description: App to control PC from mobile using bluetooth
+authors: 
+- Ganesh S P<ganesh.s.p006@gmail.com>
+homepage: https://github.com/
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^0.1.2
+  control_pad: ^1.0.0+2
+  holding_gesture: ^0.0.3
+  sensors: ^0.4.0+1
+  flutter_bluetooth_serial: ^0.2.2
+  vibration: ^1.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_launcher_icons: "^0.7.2"
+  
+flutter_icons:
+  android: "launcher_icon" 
+  ios: true
+  image_path: "assets/android-bluetooth-icon-11.jpg"
+  
+
+flutter:
+  uses-material-design: true
