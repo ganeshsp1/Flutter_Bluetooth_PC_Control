@@ -3,7 +3,7 @@ version: 0.1.0
 description: App to control PC from mobile using bluetooth
 authors: 
 - Ganesh S P<ganesh.s.p006@gmail.com>
-homepage: https://github.com/
+homepage: https://github.com/ganeshsp1/Flutter_Bluetooth_PC_Control
 
 dependencies:
   flutter:
