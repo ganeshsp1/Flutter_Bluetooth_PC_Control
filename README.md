@@ -11,5 +11,6 @@
   ```java -jar bluetooth_pc_control.jar```
   
   A new screen appears as shown below
-  [wwe](https://github.com/ganeshsp1/Flutter_Bluetooth_PC_Control/blob/master/screenshots/ServerLaunch.png)
+  
+  ![Server](https://github.com/ganeshsp1/Flutter_Bluetooth_PC_Control/blob/master/screenshots/ServerLaunch.png)
   
