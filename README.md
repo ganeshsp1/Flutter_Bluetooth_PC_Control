@@ -1,16 +1,16 @@
-# bluetooth_pc_control
+# Flutter Bluetooth PC Control 
+## Control your PC by using Flutter app
 
-A new Flutter project.
+## Prerequisites
+    1) Java 1.8
+    2) Flutter
 
 ## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+  Download the [bluetooth_pc_control.jar](https://github.com/ganeshsp1/Flutter_Bluetooth_PC_Control/blob/master/BluetoothServerJava/bluetooth_pc_control.jar)
+  If Java is installed and mentioned in environment variable as path then it should either work if you give open with java or else you can open Command Prompt point to the location where the jar is installed and run the command
+  ```java -jar bluetooth_pc_control.jar```
+  
+  A new screen appears as shown below
+  
+  ![Server](https://github.com/ganeshsp1/Flutter_Bluetooth_PC_Control/blob/master/screenshots/ServerLaunch.png)
+  
