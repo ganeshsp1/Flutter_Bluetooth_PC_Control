@@ -55,12 +55,14 @@ class _RemoteConnectionPageState extends State<RemoteConnectionPage> {
     super.initState();
 
     accelerometerEvents.listen((event) {
-      if (isGyroOn && _onHold) {
-        print(event);
+      //use the below one if you don't want gyro to be on without holding the touch pad
+      // if (isGyroOn && _onHold) {
+       if (isGyroOn) {
+        // print(event);
         _sendMessage('*#*Offset(${event.x * -1}, ${event.y * -1})*@*');
       }
     });
-    if(widget.server.isConnected){
+    if (widget.server.isConnected) {
       isConnected = true;
       isConnecting = false;
     }
@@ -72,7 +74,7 @@ class _RemoteConnectionPageState extends State<RemoteConnectionPage> {
     // });
     // RawKeyboard.instance
     //     .addListener((rawKeyEvent) => handleKeyListener(rawKeyEvent));
-    
+
     connectToBluetooth();
   }
 
@@ -88,36 +90,35 @@ class _RemoteConnectionPageState extends State<RemoteConnectionPage> {
   // }
 
   BluetoothConnection _bluetoothConnection;
-  connectToBluetooth() async{
-    if (!isConnected)
-    {
-      _bluetoothConnection = await BluetoothConnection.toAddress(widget.server.address);
+  connectToBluetooth() async {
+    if (!isConnected) {
+      _bluetoothConnection =
+          await BluetoothConnection.toAddress(widget.server.address);
 
-       isConnecting = false;
-        this._bluetoothConnection = _bluetoothConnection;
-        // Subscribe for incoming data after connecting
-        _streamSubscription =
-            _bluetoothConnection.input.listen(_onDataReceived);
+      isConnecting = false;
+      this._bluetoothConnection = _bluetoothConnection;
+      // Subscribe for incoming data after connecting
+      _streamSubscription = _bluetoothConnection.input.listen(_onDataReceived);
+      setState(() {
+        isConnected = true;
+        /* Update for `isConnecting`, since depends on `_streamSubscription` */
+      });
+
+      // Subscribe for remote disconnection
+      _streamSubscription.onDone(() {
+        print('we got disconnected by remote!');
+        _streamSubscription = null;
         setState(() {
-          isConnected = true;
-          /* Update for `isConnecting`, since depends on `_streamSubscription` */
+          isConnected = false;
+          /* Update for `isConnected`, since is depends on `_streamSubscription` */
         });
-
-        // Subscribe for remote disconnection
-        _streamSubscription.onDone(() {
-          print('we got disconnected by remote!');
-          _streamSubscription = null;
-          setState(() {
-            isConnected = false;
-            /* Update for `isConnected`, since is depends on `_streamSubscription` */
-          });
-        });
+      });
     }
-      // BluetoothConnection.toAddress(widget.server.address)
-      //     .then((_bluetoothConnection) {
-      //   // @TODO ? shouldn't be done via `.listen()`?
-       
-      // });
+    // BluetoothConnection.toAddress(widget.server.address)
+    //     .then((_bluetoothConnection) {
+    //   // @TODO ? shouldn't be done via `.listen()`?
+
+    // });
   }
 
   @override
@@ -271,37 +272,22 @@ class _RemoteConnectionPageState extends State<RemoteConnectionPage> {
                       ),
                       isGyroOn
                           ? HoldDetector(
-                              onHold: () => {_onHold = true},
-                              onCancel: () => {_onHold = false},
+                              onHold: () => setState(() {
+                                _onHold = true;
+                              }),
+                              onCancel: () => setState(() {
+                                _onHold = false;
+                              }),
+                              onTap: () => leftClickMouse(),
                               holdTimeout: Duration(milliseconds: 200),
                               enableHapticFeedback: true,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width *
-                                          (4 / 6) -
-                                      16,
-                                  height:
-                                      MediaQuery.of(context).size.height - 40,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                    gradient: SweepGradient(
-                                      center: Alignment(dx, dy),
-                                      tileMode: TileMode.repeated,
-                                      colors: [
-                                        Color.fromARGB(150, 2, 130, 238),
-                                        Color.fromARGB(220, 2, 130, 238),
-                                        Color.fromARGB(255, 2, 130, 238),
-                                        Color.fromARGB(220, 2, 130, 238),
-                                        Color.fromARGB(150, 2, 130, 238),
-                                      ],
-                                    ),
-                                  ),
-                                ),
+                              child: TouchArea(
+                                dx: dx,
+                                dy: dy,
                               ),
                             )
                           : GestureDetector(
-                            //To Do - Add scrolling gesture detector
+                              //To Do - Add scrolling gesture detector
                               // onLongPressStart: (tap) => {
                               //   print('onLongPressStart'),
                               // },
@@ -346,48 +332,15 @@ class _RemoteConnectionPageState extends State<RemoteConnectionPage> {
                               onDoubleTap: () => {
                                 doubleTapped = true,
                                 print('Double Tapped'),
-                                
                               },
                               // onPanUpdate: (dragUpdate) => onPan(dragUpdate),
                               onScaleUpdate: _condition
                                   ? (dragUpdate) => onScale(dragUpdate)
                                   : null,
                               onScaleEnd: (scaleEndDetails) => onScaleEnd(),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width *
-                                          (4 / 6) -
-                                      16,
-                                  height:
-                                      MediaQuery.of(context).size.height - 40,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                    gradient: SweepGradient(
-                                      center: Alignment(dx, dy),
-                                      tileMode: TileMode.repeated,
-                                      colors: [
-                                        Color.fromARGB(150, 2, 130, 238),
-                                        Color.fromARGB(220, 2, 130, 238),
-                                        Color.fromARGB(255, 2, 130, 238),
-                                        Color.fromARGB(220, 2, 130, 238),
-                                        Color.fromARGB(150, 2, 130, 238),
-                                      ],
-                                      // stops: [0.0, 0.25, 0.5, 0.75, 1],
-                                    ),
-                                    //  LinearGradient(
-                                    //   begin: Alignment.topLeft,
-                                    //   end: Alignment.bottomRight,
-                                    //   stops: [0.1, 0.5, 0.7, 0.9],
-                                    //   colors: [
-                                    //     Color.fromARGB(255, 2, 130, 238),
-                                    //     Color.fromARGB(220, 2, 130, 238),
-                                    //     Color.fromARGB(200, 2, 130, 238),
-                                    //     Color.fromARGB(150, 2, 130, 238),
-                                    //   ],
-                                    // ),
-                                  ),
-                                ),
+                              child: TouchArea(
+                                dx: dx,
+                                dy: dy,
                               ),
                             ),
                       GestureDetector(
@@ -509,8 +462,7 @@ class _RemoteConnectionPageState extends State<RemoteConnectionPage> {
               IconButton(
                 icon: const Icon(Icons.close),
                 iconSize: (MediaQuery.of(context).size.width / 5) - 16,
-                onPressed: isConnected ? () => exit
-                () : null,
+                onPressed: isConnected ? () => exit() : null,
                 tooltip: 'Close',
               ),
             ],
@@ -557,12 +509,12 @@ class _RemoteConnectionPageState extends State<RemoteConnectionPage> {
 
   void close() {
     if (isConnected) {
-       _streamSubscription = null;
+      _streamSubscription = null;
       _bluetoothConnection.finish();
-          setState(() {
-            isConnected = false;
-            /* Update for `isConnected`, since is depends on `_streamSubscription` */
-          });
+      setState(() {
+        isConnected = false;
+        /* Update for `isConnected`, since is depends on `_streamSubscription` */
+      });
       // FlutterBluetoothSerial.instance.disconnect();
       // _streamSubscription.cancel();
       // _streamSubscription = null;
@@ -738,5 +690,34 @@ class _RemoteConnectionPageState extends State<RemoteConnectionPage> {
     setState(() {
       this.isGyroOn = isOn;
     });
+  }
+}
+
+class TouchArea extends StatelessWidget {
+  TouchArea({this.dx, this.dy});
+  final double dx, dy;
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        width: MediaQuery.of(context).size.width * (4 / 6) - 16,
+        height: MediaQuery.of(context).size.height - 40,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20.0),
+          gradient: SweepGradient(
+            center: Alignment(dx, dy),
+            tileMode: TileMode.repeated,
+            colors: [
+              Color.fromARGB(150, 2, 130, 238),
+              Color.fromARGB(220, 2, 130, 238),
+              Color.fromARGB(255, 2, 130, 238),
+              Color.fromARGB(220, 2, 130, 238),
+              Color.fromARGB(150, 2, 130, 238),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
