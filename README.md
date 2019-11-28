@@ -6,11 +6,16 @@
     2) Flutter
 
 ## Getting Started
-  Download the [bluetooth_pc_control.jar](https://github.com/ganeshsp1/Flutter_Bluetooth_PC_Control/blob/master/BluetoothServerJava/bluetooth_pc_control.jar)
-  If Java is installed and mentioned in environment variable as path then it should either work if you give open with java or else you can open Command Prompt point to the location where the jar is installed and run the command
+  - Go to PC Settings and turn on Bluetooth and make it discoverable
+  - Download the [bluetooth_pc_control.jar](https://github.com/ganeshsp1/Flutter_Bluetooth_PC_Control/blob/master/BluetoothServerJava/bluetooth_pc_control.jar)
+  - If Java is installed and mentioned in environment variable as path then it should either work if you give open with java or else you can open Command Prompt point to the location where the jar is installed and run the command
   ```java -jar bluetooth_pc_control.jar```
   
   A new screen appears as shown below
   
   ![Server](https://github.com/ganeshsp1/Flutter_Bluetooth_PC_Control/blob/master/screenshots/ServerLaunch.png)
   
+ - Click on Start to start the server
+and then you can see the screen changing to as shown below
+
+  ![Server Started](https://github.com/ganeshsp1/Flutter_Bluetooth_PC_Control/blob/master/screenshots/ServerStart.png)
